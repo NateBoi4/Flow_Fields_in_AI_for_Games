@@ -6,12 +6,19 @@ public class VisualizeFlowField : MonoBehaviour
 {
     public int cellWidth;
     public int cellHeight;
+    public float cellSpacing;
     public List<int> cellCost;
+
+    //private GridSystem gridSystem;
 
     private void Start()
     {
-        cellWidth = 10;
+        cellWidth = 18;
         cellHeight = 10;
+        cellSpacing = 1.0f;
+
+        //gridSystem = new GridSystem(cellWidth, cellHeight);
+
         calculateCostField();
         visualizeField();
     }
@@ -50,12 +57,34 @@ public class VisualizeFlowField : MonoBehaviour
 
     void visualizeField()
     {
-        Vector3 startPos = this.transform.position;
-        for(int i = 0; i < cellCost.Count; i++)
+        
+    }
+
+    private void GetNeighbor(int index)
+    {
+        
+    }
+
+    private void OnDrawGizmos()
+    {
+        Vector3 cellCenter = this.transform.position - new Vector3(cellWidth * 0.5f, cellHeight * 0.5f);
+        Vector3 startPos = cellCenter;
+        Vector3 cellSize = new Vector3(cellSpacing, cellSpacing);
+        cellCenter += cellSize * 0.5f;
+        int index = 0;
+        for (int i = 0; i < cellWidth; i++)
         {
-            Vector3 endPos = startPos + new Vector3(1.0f, 1.0f, 0.0f);
-            Debug.DrawLine(startPos, endPos, Color.red, (float)cellCost[i]);
-            startPos = endPos;
+            for (int j = 0; j < cellHeight; j++)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawCube(cellCenter, cellSize);
+                Gizmos.color = Color.blue;
+                Gizmos.DrawRay(cellCenter, Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                cellCenter += new Vector3(0.0f, cellSpacing);
+                index++;
+            }
+            cellCenter.y = startPos.y + cellSpacing * 0.5f;
+            cellCenter += new Vector3(cellSpacing, 0.0f);
         }
     }
 }
