@@ -15,6 +15,8 @@ public class UnitManager : MonoBehaviour
     public int numUnitsPerSpawn;
     public float moveSpeed;
 
+    public Transform parentUnit;
+
     private List<GameObject> unitsInGame;
 
     private void Awake()
@@ -40,10 +42,13 @@ public class UnitManager : MonoBehaviour
         if (gridController.curFlowField == null) { return; }
         foreach (GameObject unit in unitsInGame)
         {
-            CellSystem cellBelow = gridController.curFlowField.GetCellFromWorldPos(unit.transform.position);
-            Vector3 moveDirection = new Vector3(cellBelow.bestDirection.Vector.x, 0, cellBelow.bestDirection.Vector.y);
-            Rigidbody unitRB = unit.GetComponent<Rigidbody>();
-            unitRB.velocity = moveDirection * moveSpeed;
+            if (unit)
+            {
+                CellSystem cellBelow = gridController.curFlowField.GetCellFromWorldPos(unit.transform.position);
+                Vector3 moveDirection = new Vector3(cellBelow.bestDirection.Vector.x, 0, cellBelow.bestDirection.Vector.y);
+                Rigidbody unitRB = unit.GetComponent<Rigidbody>();
+                unitRB.velocity = moveDirection * moveSpeed;
+            }
         }
     }
 
@@ -57,11 +62,11 @@ public class UnitManager : MonoBehaviour
         for (int i = 0; i < numUnitsPerSpawn; i++)
         {
             GameObject newUnit = Instantiate(unitPrefab);
-            newUnit.transform.parent = transform;
+            newUnit.transform.parent = parentUnit;
             unitsInGame.Add(newUnit);
             do
             {
-                newPos = new Vector3(Random.Range(0, maxSpawnPos.x), 0, Random.Range(0, maxSpawnPos.y));
+                newPos = new Vector3(Random.Range(0, maxSpawnPos.x), 0.5f, Random.Range(0, maxSpawnPos.y));
                 newUnit.transform.position = newPos;
             }
             while (Physics.OverlapSphere(newPos, 0.25f, colMask).Length > 0);

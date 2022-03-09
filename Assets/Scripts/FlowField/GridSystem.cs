@@ -15,6 +15,8 @@ public class GridSystem : MonoBehaviour
     public FlowField curFlowField;
     public VisualizeGrid gridDebug;
 
+    public GameObject player;
+
     private void InitializeFlowField()
     {
         curFlowField = new FlowField(cellRadius, gridSize);
@@ -24,7 +26,7 @@ public class GridSystem : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (player.transform.hasChanged)
         {
             InitializeFlowField();
 
@@ -32,12 +34,13 @@ public class GridSystem : MonoBehaviour
 
             Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f);
             Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
-            CellSystem destinationCell = curFlowField.GetCellFromWorldPos(worldMousePos);
+            CellSystem destinationCell = curFlowField.GetCellFromWorldPos(player.transform.position);
             curFlowField.CreateIntegrationField(destinationCell);
 
             curFlowField.CreateFlowField();
 
             gridDebug.DrawFlowField();
+            player.transform.hasChanged = false;
         }
     }
 }
