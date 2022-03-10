@@ -19,9 +19,16 @@ public class UnitManager : MonoBehaviour
 
     private List<GameObject> unitsInGame;
 
+    public float spawnTime = 5.0f;
+
     private void Awake()
     {
         unitsInGame = new List<GameObject>();
+    }
+
+    private void Start()
+    {
+        InvokeRepeating("SpawnUnits", spawnTime, spawnTime);
     }
 
     void Update()
@@ -81,4 +88,6 @@ public class UnitManager : MonoBehaviour
         }
         unitsInGame.Clear();
     }
+
+
 }

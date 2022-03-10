@@ -8,7 +8,7 @@ public class Health : MonoBehaviour
 
     private void Start()
     {
-        mHealth = 100;
+        mHealth = 200;
     }
 
     private void Update()
@@ -24,7 +24,8 @@ public class Health : MonoBehaviour
         {
             if(mHealth <= 0)
             {
-                Time.timeScale = 0;
+                //Time.timeScale = 0;
+                Application.Quit();
             }
         }
     }
